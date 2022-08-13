@@ -1,10 +1,10 @@
-import BoardView from '../view/board-view';
-import SortView from '../view/sort-view';
-import TaskListView from '../view/task-list';
-import TaskView from '../view/task-view';
-import TaskEditView from '../view/task-edit-view';
-import LoadMoreButtonView from '../view/load-more-button-view';
-import { render } from '../render';
+import BoardView from '../view/board-view.js';
+import SortView from '../view/sort-view.js';
+import TaskListView from '../view/task-list.js';
+import TaskView from '../view/task-view.js';
+import TaskEditView from '../view/task-edit-view.js';
+import LoadMoreButtonView from '../view/load-more-button-view.js';
+import { render } from '../render.js';
 
 export default class BoardPresenter {
   boardComponent = new BoardView();

@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import { createElement } from '../render.js';
 
 const createTaskTemplate = () => `
     <article class="card card--black">

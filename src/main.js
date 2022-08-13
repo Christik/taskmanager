@@ -1,7 +1,7 @@
-import NewTaskButtonView from './view/new-task-button-view';
-import FilterView from './view/filter-view';
-import { render } from './render';
-import BoardPresenter from './presenter/board-presenter';
+import NewTaskButtonView from './view/new-task-button-view.js';
+import FilterView from './view/filter-view.js';
+import { render } from './render.js';
+import BoardPresenter from './presenter/board-presenter.js';
 
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = siteMainElement.querySelector('.main__control');

@@ -1,4 +1,4 @@
-import { createElement } from '../render';
+import { createElement } from '../render.js';
 
 const createNewTaskButtonTemplate = () => '<button class="control__button">+ ADD NEW TASK</button>';
 
