@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const getRandomInteger = (from, to) => {
   if (from > to) {
     throw new Error('Диапазон возможных значений должен начинаться с меньшего числа и заканчиваться большим');
@@ -6,4 +8,6 @@ const getRandomInteger = (from, to) => {
   return Math.floor(Math.random() * (to - from + 1) + from);
 };
 
-export { getRandomInteger };
+const humanizeTaskDueDate = (dueDate) => dayjs(dueDate).format('D MMMM');
+
+export { getRandomInteger, humanizeTaskDueDate };
