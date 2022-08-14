@@ -1,25 +1,28 @@
 import { createElement } from '../render.js';
-import { humanizeTaskDueDate, isTaskExpired } from '../utils.js';
+import { humanizeTaskDueDate, isTaskExpired, isTaskRepeating } from '../utils.js';
 
-const createTaskTemplate = ({ color, description, dueDate }) => {
+const createTaskTemplate = ({ color, description, dueDate, repeatingDays, isArchived, isFavorite }) => {
   dueDate = (dueDate === null) ? '' : humanizeTaskDueDate(dueDate);
 
   const deadlineClassName = isTaskExpired(dueDate) ? 'card--deadline' : '';
+  const repeatClassName = isTaskRepeating(repeatingDays) ? 'card--repeat' : '';
+  const archiveClassName = isArchived ? 'card__btn--archive card__btn--disabled' : 'card__btn--archive';
+  const favoriteClassName = isFavorite ? 'card__btn--favorites card__btn--disabled' : 'card__btn--favorites';
 
   return /*html*/ `
-    <article class="card card--${color} ${deadlineClassName}">
+    <article class="card card--${color} ${deadlineClassName} ${repeatClassName}">
       <div class="card__form">
         <div class="card__inner">
           <div class="card__control">
             <button type="button" class="card__btn card__btn--edit">
               edit
             </button>
-            <button type="button" class="card__btn card__btn--archive">
+            <button type="button" class="card__btn ${archiveClassName}">
               archive
             </button>
             <button
               type="button"
-              class="card__btn card__btn--favorites"
+              class="card__btn ${favoriteClassName}"
             >
               favorites
             </button>
