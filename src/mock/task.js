@@ -1,4 +1,5 @@
 import { getRandomInteger } from '../utils.js';
+import dayjs from 'dayjs';
 
 const generateDescription = () => {
   const descriptions = [
@@ -16,10 +17,23 @@ const generateDescription = () => {
   return descriptions[randomIndex];
 };
 
+const generateDate = () => {
+  const isDateExist = Boolean(getRandomInteger(0, 1));
+
+  if (!isDateExist) {
+    return null;
+  }
+
+  const maxDayGap = 7;
+  const dayGap = getRandomInteger(-maxDayGap, maxDayGap);
+
+  return dayjs().add(dayGap, 'day').toDate();
+};
+
 const generateTask = () => ({
   color: 'yellow',
   description: generateDescription(),
-  dueDate: null,
+  dueDate: generateDate(),
   isArchived: false,
   isFavorite: false,
   repeatingDays: {
