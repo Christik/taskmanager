@@ -40,13 +40,27 @@ const generateRepeatingDays = () => ({
   su: false,
 });
 
-const generateTask = () => ({
-  color: 'yellow',
-  description: generateDescription(),
-  dueDate: generateDate(),
-  isArchived: false,
-  isFavorite: false,
-  repeatingDays: generateRepeatingDays(),
-});
+const nonRepeatingDays = {
+  mo: false,
+  tu: false,
+  we: false,
+  th: false,
+  fr: false,
+  sa: false,
+  su: false,
+};
+
+const generateTask = () => {
+  const dueDate = generateDate();
+
+  return {
+    color: 'yellow',
+    description: generateDescription(),
+    dueDate,
+    isArchived: false,
+    isFavorite: false,
+    repeatingDays: (dueDate === null) ? nonRepeatingDays : generateRepeatingDays(),
+  };
+};
 
 export { generateTask };
