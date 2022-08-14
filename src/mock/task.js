@@ -30,21 +30,23 @@ const generateDate = () => {
   return dayjs().add(dayGap, 'day').toDate();
 };
 
+const generateRepeatingDays = () => ({
+  mo: false,
+  tu: false,
+  we: Boolean(getRandomInteger(0, 1)),
+  th: false,
+  fr: Boolean(getRandomInteger(0, 1)),
+  sa: false,
+  su: false,
+});
+
 const generateTask = () => ({
   color: 'yellow',
   description: generateDescription(),
   dueDate: generateDate(),
   isArchived: false,
   isFavorite: false,
-  repeatingDays: {
-    mo: false,
-    tu: false,
-    we: false,
-    th: false,
-    fr: false,
-    sa: false,
-    su: false,
-  }
+  repeatingDays: generateRepeatingDays(),
 });
 
 export { generateTask };
