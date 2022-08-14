@@ -2,12 +2,11 @@ import { createElement } from '../render.js';
 import { humanizeTaskDueDate, isTaskExpired, isTaskRepeating } from '../utils.js';
 
 const createTaskTemplate = ({ color, description, dueDate, repeatingDays, isArchived, isFavorite }) => {
-  dueDate = (dueDate === null) ? '' : humanizeTaskDueDate(dueDate);
-
   const deadlineClassName = isTaskExpired(dueDate) ? 'card--deadline' : '';
   const repeatClassName = isTaskRepeating(repeatingDays) ? 'card--repeat' : '';
   const archiveClassName = isArchived ? 'card__btn--archive card__btn--disabled' : 'card__btn--archive';
   const favoriteClassName = isFavorite ? 'card__btn--favorites card__btn--disabled' : 'card__btn--favorites';
+  const humanizeDueDate = (dueDate === null) ? '' : humanizeTaskDueDate(dueDate);
 
   return /*html*/ `
     <article class="card card--${color} ${deadlineClassName} ${repeatClassName}">
@@ -43,7 +42,7 @@ const createTaskTemplate = ({ color, description, dueDate, repeatingDays, isArch
               <div class="card__dates">
                 <div class="card__date-deadline">
                   <p class="card__input-deadline-wrap">
-                    <span class="card__date">${dueDate}</span>
+                    <span class="card__date">${humanizeDueDate}</span>
                   </p>
                 </div>
               </div>
