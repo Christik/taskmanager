@@ -7,12 +7,18 @@ import LoadMoreButtonView from '../view/load-more-button-view.js';
 import { render } from '../render.js';
 import { isEscKeydown } from '../utils.js';
 
+const TASK_COUNT_PER_STEP = 8;
+
 export default class BoardPresenter {
   #boardContainer = null;
   #taskModel = null;
-  #boardTasks = null;
+  #boardTasks = [];
+
   #boardComponent = new BoardView();
   #taskListComponent = new TaskListView();
+  #loadMoreButtonComponent = new LoadMoreButtonView();
+
+  #renderedTaskCount = TASK_COUNT_PER_STEP;
 
   init(boardContainer, taskModel) {
     this.#boardContainer = boardContainer;
@@ -23,11 +29,15 @@ export default class BoardPresenter {
     render(new SortView(), this.#boardComponent.element);
     render(this.#taskListComponent, this.#boardComponent.element);
 
-    for (let i = 0; i < this.#boardTasks.length; i++) {
+    for (let i = 0; i < Math.min(this.#boardTasks.length, TASK_COUNT_PER_STEP); i++) {
       this.#renderTask(this.#boardTasks[i]);
     }
 
-    render(new LoadMoreButtonView(), this.#boardComponent.element);
+    if (this.#boardTasks.length > TASK_COUNT_PER_STEP) {
+      render(this.#loadMoreButtonComponent, this.#boardComponent.element);
+
+      this.#loadMoreButtonComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
+    }
   }
 
   #renderTask(task) {
@@ -66,4 +76,19 @@ export default class BoardPresenter {
 
     render(taskComponent, this.#taskListComponent.element);
   }
+
+  #handleLoadMoreButtonClick = (evt) => {
+    evt.preventDefault();
+
+    this.#boardTasks
+      .slice(this.#renderedTaskCount, this.#renderedTaskCount + TASK_COUNT_PER_STEP)
+      .forEach((task) => this.#renderTask(task));
+
+    this.#renderedTaskCount += TASK_COUNT_PER_STEP;
+
+    if (this.#renderedTaskCount >= this.#boardTasks.length) {
+      this.#loadMoreButtonComponent.element.remove();
+      this.#loadMoreButtonComponent.removeElement();
+    }
+  };
 }
