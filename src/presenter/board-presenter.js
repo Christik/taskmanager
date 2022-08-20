@@ -4,6 +4,7 @@ import TaskListView from '../view/task-list.js';
 import TaskView from '../view/task-view.js';
 import TaskEditView from '../view/task-edit-view.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
+import NoTaskView from '../view/no-task-view.js';
 import { render } from '../render.js';
 import { isEscKeydown } from '../utils.js';
 
@@ -26,17 +27,22 @@ export default class BoardPresenter {
     this.#boardTasks = this.#taskModel.tasks;
 
     render(this.#boardComponent, this.#boardContainer);
-    render(new SortView(), this.#boardComponent.element);
-    render(this.#taskListComponent, this.#boardComponent.element);
 
-    for (let i = 0; i < Math.min(this.#boardTasks.length, TASK_COUNT_PER_STEP); i++) {
-      this.#renderTask(this.#boardTasks[i]);
-    }
+    if (this.#boardTasks.every((task) => task.isArchived)) {
+      render(new NoTaskView(), this.#boardComponent.element);
+    } else {
+      render(new SortView(), this.#boardComponent.element);
+      render(this.#taskListComponent, this.#boardComponent.element);
 
-    if (this.#boardTasks.length > TASK_COUNT_PER_STEP) {
-      render(this.#loadMoreButtonComponent, this.#boardComponent.element);
+      for (let i = 0; i < Math.min(this.#boardTasks.length, TASK_COUNT_PER_STEP); i++) {
+        this.#renderTask(this.#boardTasks[i]);
+      }
 
-      this.#loadMoreButtonComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
+      if (this.#boardTasks.length > TASK_COUNT_PER_STEP) {
+        render(this.#loadMoreButtonComponent, this.#boardComponent.element);
+
+        this.#loadMoreButtonComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
+      }
     }
   }
 
