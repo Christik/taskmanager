@@ -14,9 +14,12 @@ const isTaskExpired = (dueDate) => dueDate && dayjs().isAfter(dueDate, 'D');
 
 const isTaskRepeating = (repeats) => Object.values(repeats).some(Boolean);
 
+const isEscKeydown = (evt) => (evt.key === 'Escape' || evt.key === 'Esc');
+
 export {
   getRandomInteger,
   humanizeTaskDueDate,
   isTaskExpired,
   isTaskRepeating,
+  isEscKeydown,
 };

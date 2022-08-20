@@ -5,6 +5,7 @@ import TaskView from '../view/task-view.js';
 import TaskEditView from '../view/task-edit-view.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
 import { render } from '../render.js';
+import { isEscKeydown } from '../utils.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -35,18 +36,33 @@ export default class BoardPresenter {
     const editButtonElement = taskComponent.element.querySelector('.card__btn--edit');
     const saveButtonElement = taskEditComponent.element.querySelector('.card__save');
 
-    const replaceCardToForm = (evt) => {
-      evt.preventDefault();
+    const replaceCardToForm = () => {
       this.#taskListComponent.element.replaceChild(taskEditComponent.element, taskComponent.element);
     };
 
-    const replaceFormToCard = (evt) => {
-      evt.preventDefault();
+    const replaceFormToCard = () => {
       this.#taskListComponent.element.replaceChild(taskComponent.element, taskEditComponent.element);
     };
 
-    editButtonElement.addEventListener('click', replaceCardToForm);
-    saveButtonElement.addEventListener('click', replaceFormToCard);
+    const onEscKeydown = (evt) => {
+      if (isEscKeydown(evt)) {
+        evt.preventDefault();
+        replaceFormToCard();
+        document.removeEventListener('keydown', onEscKeydown);
+      }
+    };
+
+    editButtonElement.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      replaceCardToForm();
+      document.addEventListener('keydown', onEscKeydown);
+    });
+
+    saveButtonElement.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      replaceFormToCard();
+      document.removeEventListener('keydown', onEscKeydown);
+    });
 
     render(taskComponent, this.#taskListComponent.element);
   }
