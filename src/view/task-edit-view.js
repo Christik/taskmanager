@@ -63,11 +63,11 @@ const createTaskEditColorsTemplate = () => COLORS.map((color) => /*html*/ `
 
 const createTaskEditTemplate = (task = {}) => {
   const {
-    color = 'black',
-    description = '',
+    // color = 'black',
+    // description = '',
     dueDate = null,
-    isArchived = false,
-    isFavorite = false,
+    // isArchived = false,
+    // isFavorite = false,
     repeatingDays = {
       mo: false,
       tu: false,
@@ -128,23 +128,21 @@ const createTaskEditTemplate = (task = {}) => {
 };
 
 export default class TaskEditView {
-  constructor(task) {
-    this.task = task;
+  #element = null;
+
+  get template() {
+    return createTaskEditTemplate();
   }
 
-  getTemplate() {
-    return createTaskEditTemplate(this.task);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

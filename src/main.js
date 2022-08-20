@@ -6,10 +6,10 @@ import TaskModel from './model/tasks-model.js';
 
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = siteMainElement.querySelector('.main__control');
-const boardPresenter = new BoardPresenter();
 const taskModel = new TaskModel();
+const boardPresenter = new BoardPresenter(siteMainElement, taskModel);
 
 render(new NewTaskButtonView(), siteHeaderElement);
 render(new FilterView(), siteMainElement);
 
-boardPresenter.init(siteMainElement, taskModel);
+boardPresenter.init();

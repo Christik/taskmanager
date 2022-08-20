@@ -1,12 +1,16 @@
 import { createElement } from '../render.js';
 
-const createNewTaskButtonTemplate = () => '<button class="control__button">+ ADD NEW TASK</button>';
+const createNoTaskTemplate = () => /*html*/ `
+  <p class="board__no-tasks">
+    Click «ADD NEW TASK» in menu to create your first task
+  </p>
+`;
 
-export default class NewTaskButtonView {
+export default class NoTaskView {
   #element = null;
 
   get template() {
-    return createNewTaskButtonTemplate();
+    return createNoTaskTemplate();
   }
 
   get element() {
