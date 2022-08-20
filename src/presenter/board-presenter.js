@@ -1,25 +1,27 @@
-import BoardView from '../view/board-view';
-import SortView from '../view/sort-view';
-import TaskListView from '../view/task-list';
-import TaskView from '../view/task-view';
-import TaskEditView from '../view/task-edit-view';
-import LoadMoreButtonView from '../view/load-more-button-view';
-import { render } from '../render';
+import BoardView from '../view/board-view.js';
+import SortView from '../view/sort-view.js';
+import TaskListView from '../view/task-list.js';
+import TaskView from '../view/task-view.js';
+import TaskEditView from '../view/task-edit-view.js';
+import LoadMoreButtonView from '../view/load-more-button-view.js';
+import { render } from '../render.js';
 
 export default class BoardPresenter {
   boardComponent = new BoardView();
   taskListComponent = new TaskListView();
 
-  init(boardContainer) {
+  init(boardContainer, taskModel) {
     this.boardContainer = boardContainer;
+    this.taskModel = taskModel;
+    this.boardTasks = this.taskModel.tasks;
 
     render(this.boardComponent, this.boardContainer);
     render(new SortView(), this.boardComponent.element);
     render(this.taskListComponent, this.boardComponent.element);
-    render(new TaskEditView(), this.taskListComponent.element);
+    render(new TaskEditView(this.boardTasks[0]), this.taskListComponent.element);
 
-    for (let i = 0; i < 3; i++) {
-      render(new TaskView(), this.taskListComponent.element);
+    for (let i = 0; i < this.boardTasks.length; i++) {
+      render(new TaskView(this.boardTasks[i]), this.taskListComponent.element);
     }
 
     render(new LoadMoreButtonView(), this.boardComponent.element);
