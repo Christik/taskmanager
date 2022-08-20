@@ -63,11 +63,11 @@ const createTaskEditColorsTemplate = () => COLORS.map((color) => /*html*/ `
 
 const createTaskEditTemplate = (task = {}) => {
   const {
-    color = 'black',
-    description = '',
+    // color = 'black',
+    // description = '',
     dueDate = null,
-    isArchived = false,
-    isFavorite = false,
+    // isArchived = false,
+    // isFavorite = false,
     repeatingDays = {
       mo: false,
       tu: false,
