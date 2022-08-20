@@ -7,23 +7,31 @@ import LoadMoreButtonView from '../view/load-more-button-view.js';
 import { render } from '../render.js';
 
 export default class BoardPresenter {
-  boardComponent = new BoardView();
-  taskListComponent = new TaskListView();
+  #boardContainer = null;
+  #taskModel = null;
+  #boardTasks = null;
+  #boardComponent = new BoardView();
+  #taskListComponent = new TaskListView();
 
   init(boardContainer, taskModel) {
-    this.boardContainer = boardContainer;
-    this.taskModel = taskModel;
-    this.boardTasks = this.taskModel.tasks;
+    this.#boardContainer = boardContainer;
+    this.#taskModel = taskModel;
+    this.#boardTasks = this.#taskModel.tasks;
 
-    render(this.boardComponent, this.boardContainer);
-    render(new SortView(), this.boardComponent.element);
-    render(this.taskListComponent, this.boardComponent.element);
-    render(new TaskEditView(this.boardTasks[0]), this.taskListComponent.element);
+    render(this.#boardComponent, this.#boardContainer);
+    render(new SortView(), this.#boardComponent.element);
+    render(this.#taskListComponent, this.#boardComponent.element);
 
-    for (let i = 0; i < this.boardTasks.length; i++) {
-      render(new TaskView(this.boardTasks[i]), this.taskListComponent.element);
+    for (let i = 0; i < this.#boardTasks.length; i++) {
+      this.#renderTask(this.#boardTasks[i]);
     }
 
-    render(new LoadMoreButtonView(), this.boardComponent.element);
+    render(new LoadMoreButtonView(), this.#boardComponent.element);
+  }
+
+  #renderTask(task) {
+    const component = new TaskView(task);
+
+    render(component, this.#taskListComponent.element);
   }
 }
