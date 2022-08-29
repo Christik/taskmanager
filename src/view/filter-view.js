@@ -1,69 +1,55 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createFilterTemplate = () => `
-    <section class="main__filter filter container">
-      <input
-        type="radio"
-        id="filter__all"
-        class="filter__input visually-hidden"
-        name="filter"
-        checked
-      />
-      <label for="filter__all" class="filter__label">
-        All <span class="filter__all-count">13</span></label
-      >
-      <input
-        type="radio"
-        id="filter__overdue"
-        class="filter__input visually-hidden"
-        name="filter"
-        disabled
-      />
-      <label for="filter__overdue" class="filter__label"
-        >Overdue <span class="filter__overdue-count">0</span></label
-      >
-      <input
-        type="radio"
-        id="filter__today"
-        class="filter__input visually-hidden"
-        name="filter"
-        disabled
-      />
-      <label for="filter__today" class="filter__label"
-        >Today <span class="filter__today-count">0</span></label
-      >
-      <input
-        type="radio"
-        id="filter__favorites"
-        class="filter__input visually-hidden"
-        name="filter"
-      />
-      <label for="filter__favorites" class="filter__label"
-        >Favorites <span class="filter__favorites-count">1</span></label
-      >
-      <input
-        type="radio"
-        id="filter__repeating"
-        class="filter__input visually-hidden"
-        name="filter"
-      />
-      <label for="filter__repeating" class="filter__label"
-        >Repeating <span class="filter__repeating-count">1</span></label
-      >
-      <input
-        type="radio"
-        id="filter__archive"
-        class="filter__input visually-hidden"
-        name="filter"
-      />
-      <label for="filter__archive" class="filter__label"
-        >Archive <span class="filter__archive-count">115</span></label
-      >
-    </section>
+const createFilterItemTemplate = (name, count, isDisabled, isChecked) => /*html*/`
+  <input
+    type="radio"
+    id="filter__${name}"
+    class="filter__input visually-hidden"
+    name="filter"
+    ${isDisabled ? 'disabled' : ''}
+    ${isChecked ? 'checked' : ''}
+  />
+  <label
+    for="filter__${name}"
+    class="filter__label"
+  >
+    ${name}
+    <span class="filter__${name}-count">${count}</span>
+  </label>
 `;
 
+const createFilterTemplate = (filters) => {
+  const itemTemplate = filters.map(
+    (filter, index) => {
+      const isDisabled = (filter.count === 0);
+      const isChecked = (index === 0);
+
+      return createFilterItemTemplate(
+        filter.name,
+        filter.count,
+        isDisabled,
+        isChecked
+      );
+    }
+  ).join('');
+
+  return /*html*/`
+    <section class="main__filter filter container">
+      ${itemTemplate}
+    </section>
+  `;
+};
+
 export default class FilterView extends AbstractView {
+  #filters = null;
+
+  constructor(filters) {
+    super();
+
+    this.#filters = filters;
+  }
+
   get template() {
-    return createFilterTemplate();
+    return createFilterTemplate(this.#filters);
   }
 }
