@@ -6,7 +6,7 @@ import TaskView from '../view/task-view.js';
 import TaskEditView from '../view/task-edit-view.js';
 import LoadMoreButtonView from '../view/load-more-button-view.js';
 import NoTaskView from '../view/no-task-view.js';
-import { isEscKeydown } from '../utils.js';
+import { isEscKeydown } from '../utils/common.js';
 
 const TASK_COUNT_PER_STEP = 8;
 

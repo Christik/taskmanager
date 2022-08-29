@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeTaskDueDate, isTaskExpired, isTaskRepeating } from '../utils.js';
+import { humanizeTaskDueDate, isTaskExpired, isTaskRepeating } from '../utils/task.js';
 
 const createTaskTemplate = ({ color, description, dueDate, repeatingDays, isArchived, isFavorite }) => {
   const deadlineClassName = isTaskExpired(dueDate) ? 'card--deadline' : '';
