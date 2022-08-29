@@ -34,8 +34,6 @@ export default class BoardPresenter {
   #renderTask(task) {
     const taskComponent = new TaskView(task);
     const taskEditComponent = new TaskEditView();
-    const editButtonElement = taskComponent.element.querySelector('.card__btn--edit');
-    const saveButtonElement = taskEditComponent.element.querySelector('.card__save');
 
     const replaceCardToForm = () => {
       this.#taskListComponent.element.replaceChild(taskEditComponent.element, taskComponent.element);
@@ -53,14 +51,12 @@ export default class BoardPresenter {
       }
     };
 
-    editButtonElement.addEventListener('click', (evt) => {
-      evt.preventDefault();
+    taskComponent.setEditClickHandler(() => {
       replaceCardToForm();
       document.addEventListener('keydown', onEscKeydown);
     });
 
-    saveButtonElement.addEventListener('click', (evt) => {
-      evt.preventDefault();
+    taskEditComponent.setFormSubmitHandler(() => {
       replaceFormToCard();
       document.removeEventListener('keydown', onEscKeydown);
     });
@@ -84,14 +80,14 @@ export default class BoardPresenter {
       if (this.#boardTasks.length > TASK_COUNT_PER_STEP) {
         render(this.#loadMoreButtonComponent, this.#boardComponent.element);
 
-        this.#loadMoreButtonComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
+        this.#loadMoreButtonComponent.setClickHandler(
+          this.#handleLoadMoreButtonClick
+        );
       }
     }
   }
 
-  #handleLoadMoreButtonClick = (evt) => {
-    evt.preventDefault();
-
+  #handleLoadMoreButtonClick = () => {
     this.#boardTasks
       .slice(this.#renderedTaskCount, this.#renderedTaskCount + TASK_COUNT_PER_STEP)
       .forEach((task) => this.#renderTask(task));

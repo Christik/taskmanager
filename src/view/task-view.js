@@ -55,7 +55,6 @@ const createTaskTemplate = ({ color, description, dueDate, repeatingDays, isArch
 };
 
 export default class TaskView extends AbstractView {
-  #element = null;
   #task = null;
 
   constructor(task) {
@@ -67,4 +66,16 @@ export default class TaskView extends AbstractView {
   get template() {
     return createTaskTemplate(this.#task);
   }
+
+  setEditClickHandler = (callback) => {
+    this._callback.editClick = callback;
+    this.element
+      .querySelector('.card__btn--edit')
+      .addEventListener('click', this.#editClickHandler);
+  };
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.editClick();
+  };
 }
