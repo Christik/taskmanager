@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeTaskDueDate, isTaskExpired, isTaskRepeating } from '../utils.js';
 
 const createTaskTemplate = ({ color, description, dueDate, repeatingDays, isArchived, isFavorite }) => {
@@ -54,27 +54,17 @@ const createTaskTemplate = ({ color, description, dueDate, repeatingDays, isArch
   `;
 };
 
-export default class TaskView {
+export default class TaskView extends AbstractView {
   #element = null;
   #task = null;
 
   constructor(task) {
+    super();
+
     this.#task = task;
   }
 
   get template() {
     return createTaskTemplate(this.#task);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
