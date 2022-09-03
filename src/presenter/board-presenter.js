@@ -1,4 +1,4 @@
-import { render, RenderPosition } from '../framework/render.js';
+import { remove, render, RenderPosition } from '../framework/render.js';
 import BoardView from '../view/board-view.js';
 import SortView from '../view/sort-view.js';
 import TaskListView from '../view/task-list.js';
@@ -12,6 +12,7 @@ export default class BoardPresenter {
   #boardContainer = null;
   #taskModel = null;
   #boardTasks = [];
+  #taskPresenter = new Map();
 
   #boardComponent = new BoardView();
   #sortComponent = new SortView();
@@ -38,6 +39,14 @@ export default class BoardPresenter {
   #renderTask = (task) => {
     const taskPresenter = new TaskPresenter(this.#taskListComponent.element);
     taskPresenter.init(task);
+    this.#taskPresenter.set(task.id, taskPresenter);
+  };
+
+  #clearTaskList = () => {
+    this.#taskPresenter.forEach((presenter) => presenter.destroy());
+    this.#taskPresenter.clear();
+    this.#renderedTaskCount = TASK_COUNT_PER_STEP;
+    remove(this.#loadMoreButtonComponent);
   };
 
   #renderTasks = (from, to) => {
