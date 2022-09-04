@@ -80,11 +80,11 @@ const createTaskEditColorsTemplate = () => COLORS.map((color) => /*html*/ `
 
 const createTaskEditTemplate = (task = {}) => {
   const {
-    // color = 'black',
-    // description = '',
+    color = 'black',
+    description = '',
     dueDate = null,
-    // isArchived = false,
-    // isFavorite = false,
+    isArchived = false,
+    isFavorite = false,
     repeatingDays = {
       mo: false,
       tu: false,
@@ -129,7 +129,7 @@ const createTaskEditTemplate = (task = {}) => {
             <div class="card__colors-inner">
               <h3 class="card__colors-title">Color</h3>
               <div class="card__colors-wrap">
-                ${createTaskEditColorsTemplate()}
+                ${createTaskEditColorsTemplate(color)}
               </div>
             </div>
           </div>
@@ -166,6 +166,6 @@ export default class TaskEditView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this.#task);
   };
 }

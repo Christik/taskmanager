@@ -8,9 +8,11 @@ export default class TaskPresenter {
   #taskComponent = null;
   #taskEditComponent = null;
   #taskListContainer = null;
+  #changeData = null;
 
-  constructor(taskListContainer) {
+  constructor(taskListContainer, changeData) {
     this.#taskListContainer = taskListContainer;
+    this.#changeData = changeData;
   }
 
   init = (task) => {
@@ -20,10 +22,11 @@ export default class TaskPresenter {
     const prevTaskEditComponent = this.#taskEditComponent;
 
     this.#taskComponent = new TaskView(this.#task);
-    this.#taskEditComponent = new TaskEditView();
+    this.#taskEditComponent = new TaskEditView(this.#task);
 
     this.#taskComponent.setEditClickHandler(this.#handleEditClick);
-
+    this.#taskComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#taskComponent.setArchiveClickHandler(this.#handleArchiveClick);
     this.#taskEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
 
     if (prevTaskComponent === null || prevTaskEditComponent === null) {
@@ -75,7 +78,16 @@ export default class TaskPresenter {
     document.addEventListener('keydown', this.#escKeydownHandler);
   };
 
-  #handleFormSubmit = () => {
+  #handleFavoriteClick = () => {
+    this.#changeData({...this.#task, isFavorite: !this.#task.isFavorite});
+  };
+
+  #handleArchiveClick = () => {
+    this.#changeData({...this.#task, isArchived: !this.#task.isArchived});
+  };
+
+  #handleFormSubmit = (task) => {
+    this.#changeData(task);
     this.#replaceFormToCard();
     document.removeEventListener('keydown', this.#escKeydownHandler);
   };
