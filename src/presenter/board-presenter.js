@@ -40,7 +40,8 @@ export default class BoardPresenter {
   #renderTask = (task) => {
     const taskPresenter = new TaskPresenter(
       this.#taskListComponent.element,
-      this.#handleTaskChange
+      this.#handleTaskChange,
+      this.#handleModeChange
     );
     taskPresenter.init(task);
     this.#taskPresenter.set(task.id, taskPresenter);
@@ -101,6 +102,10 @@ export default class BoardPresenter {
       this.#loadMoreButtonComponent.element.remove();
       this.#loadMoreButtonComponent.removeElement();
     }
+  };
+
+  #handleModeChange = () => {
+    this.#taskPresenter.forEach((presenter) => presenter.resetView());
   };
 
   #handleTaskChange = (updatedTask) => {

@@ -3,16 +3,26 @@ import TaskView from '../view/task-view.js';
 import TaskEditView from '../view/task-edit-view.js';
 import { isEscKeydown } from '../utils/common.js';
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
 export default class TaskPresenter {
   #task = null;
+  #mode = Mode.DEFAULT;
+
   #taskComponent = null;
   #taskEditComponent = null;
   #taskListContainer = null;
-  #changeData = null;
 
-  constructor(taskListContainer, changeData) {
+  #changeData = null;
+  #changeMode = null;
+
+  constructor(taskListContainer, changeData, changeMode) {
     this.#taskListContainer = taskListContainer;
     this.#changeData = changeData;
+    this.#changeMode = changeMode;
   }
 
   init = (task) => {
@@ -34,11 +44,11 @@ export default class TaskPresenter {
       return;
     }
 
-    if (this.#taskListContainer.contains(prevTaskComponent.element)) {
+    if (this.#mode === Mode.DEFAULT) {
       replace(this.#taskComponent, prevTaskComponent);
     }
 
-    if (this.#taskListContainer.contains(prevTaskEditComponent.element)) {
+    if (this.#mode === Mode.EDITING) {
       replace(this.#taskEditComponent, prevTaskEditComponent);
     }
 
@@ -51,11 +61,20 @@ export default class TaskPresenter {
     remove(this.#taskEditComponent);
   };
 
+  resetView = () => {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#replaceFormToCard();
+    }
+  };
+
   #replaceCardToForm = () => {
     this.#taskListContainer.replaceChild(
       this.#taskEditComponent.element,
       this.#taskComponent.element
     );
+    this.#changeMode();
+    this.#mode = Mode.EDITING;
+    document.addEventListener('keydown', this.#escKeydownHandler);
   };
 
   #replaceFormToCard = () => {
@@ -63,19 +82,19 @@ export default class TaskPresenter {
       this.#taskComponent.element,
       this.#taskEditComponent.element
     );
+    this.#mode = Mode.DEFAULT;
+    document.removeEventListener('keydown', this.#escKeydownHandler);
   };
 
   #escKeydownHandler = (evt) => {
     if (isEscKeydown(evt)) {
       evt.preventDefault();
       this.#replaceFormToCard();
-      document.removeEventListener('keydown', this.#escKeydownHandler);
     }
   };
 
   #handleEditClick = () => {
     this.#replaceCardToForm();
-    document.addEventListener('keydown', this.#escKeydownHandler);
   };
 
   #handleFavoriteClick = () => {
